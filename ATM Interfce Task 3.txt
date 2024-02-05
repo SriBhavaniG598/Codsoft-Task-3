@@ -1,0 +1,83 @@
+import java.util.Scanner;
+
+public class BankingApplication {
+    public static void main(String args[]) {
+        Scanner inputScanner = new Scanner(System.in);
+        BankingMachine bankingMachine = new BankingMachine(inputScanner);
+        CustomerAccount customerAccount = new CustomerAccount(bankingMachine);
+
+        while (true) {
+            System.out.println("Select from the following options");
+            System.out.println("1 - Withdraw");
+            System.out.println("2 - Deposit");
+            System.out.println("3 - Check Balance");
+            System.out.println("4 - Exit");
+
+            int userChoice = inputScanner.nextInt();
+
+            switch (userChoice) {
+                case 1:
+                    customerAccount.makeWithdrawal();
+                    break;
+                case 2:
+                    customerAccount.makeDeposit();
+                    break;
+                case 3:
+                    customerAccount.checkBalance();
+                    break;
+                case 4:
+                    System.out.println("Exiting.....");
+                    inputScanner.close();
+                    return;
+                default:
+                    System.out.println("Invalid option");
+                    break;
+            }
+        }
+    }
+}
+
+class BankingMachine {
+    Scanner scanner;
+    int availableBalance;
+
+    public BankingMachine(Scanner inputScanner) {
+        this.scanner = inputScanner;
+        System.out.println("Enter the current available balance");
+        availableBalance = scanner.nextInt();
+    }
+}
+
+class CustomerAccount {
+    BankingMachine bankingMachine;
+
+    public CustomerAccount(BankingMachine bankingMachine) {
+        this.bankingMachine = bankingMachine;
+    }
+
+    void makeWithdrawal() {
+        System.out.println("Enter the amount to withdraw");
+        int withdrawalAmount = bankingMachine.scanner.nextInt();
+        if (withdrawalAmount > 0 && withdrawalAmount <= bankingMachine.availableBalance) {
+            bankingMachine.availableBalance -= withdrawalAmount;
+            System.out.println("Withdrawal successful!");
+        } else {
+            System.out.println("Invalid withdrawal amount. Please try again.");
+        }
+    }
+
+    void makeDeposit() {
+        System.out.println("Enter the amount to deposit");
+        int depositAmount = bankingMachine.scanner.nextInt();
+        if (depositAmount > 0) {
+            bankingMachine.availableBalance += depositAmount;
+            System.out.println("Deposit successful!");
+        } else {
+            System.out.println("Invalid deposit amount. Please try again.");
+        }
+    }
+
+    void checkBalance() {
+        System.out.println("The available balance is " + bankingMachine.availableBalance);
+    }
+}
